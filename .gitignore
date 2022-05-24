@@ -1,3 +1,4 @@
 /EWARM/*.dep
 /EWARM/settings
 /EWARM/bluePill
+/EWARM/*.ewt
