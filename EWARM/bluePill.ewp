@@ -218,6 +218,7 @@
                     <state>USE_HAL_DRIVER</state>
                     <state>STM32F103xB</state>
                     <state>STM32_THREAD_SAFE_STRATEGY=4</state>
+                    <state>BLUE_PILL</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>

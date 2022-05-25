@@ -18,7 +18,7 @@ int main(void)
   // Reset of all peripherals, Initializes the Flash interface and the Systick.
   HAL_Init();
 
-  BSP_ledInit();
+  BSP_greenLedInit();
 
   SystemClock_Config();
 
