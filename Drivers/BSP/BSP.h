@@ -8,6 +8,8 @@ extern "C"
 
 typedef uint8_t BSP_uartNumber_t;
 
+void BSP_disableInterrupt(void);
+
 void BSP_greenLedInit(void);
 void BSP_greenLedToggle(void);
 

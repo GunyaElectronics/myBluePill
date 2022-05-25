@@ -1,6 +1,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "BSP.h"
+#include "MCUPinout.h"
 
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -18,9 +19,10 @@ int main(void)
   // Reset of all peripherals, Initializes the Flash interface and the Systick.
   HAL_Init();
 
-  BSP_greenLedInit();
-
   SystemClock_Config();
+
+  BSP_uartInit(CONSOLE_UART_NUMBER, CONSOLE_UART_BAUDRATE);
+  BSP_greenLedInit();
 
   osKernelInitialize();
 
