@@ -47,3 +47,17 @@ void BSP_uartInit(BSP_uartNumber_t uartNumber, uint32_t baudrate)
         break;
     }
 }
+
+void BSP_uartSendBlocking(BSP_uartNumber_t uartNumber, uint8_t *pData, uint16_t sizeBytes)
+{
+    ASSERT(sizeBytes > 0);
+    ASSERT(pData != NULL);
+
+    switch (uartNumber) {
+    case CONSOLE_UART_NUMBER:
+        ASSERT(HAL_UART_Transmit(&gUartConsole, pData, sizeBytes, 0xFFFFFFFF) == HAL_OK);
+        break;
+    default:
+        break;
+    }
+}
