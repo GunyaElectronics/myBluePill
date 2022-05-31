@@ -22,6 +22,7 @@
 #include "stm32f1xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "MCUPinout.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -164,6 +165,11 @@ void DebugMon_Handler(void)
   */
 void DMA1_Channel1_IRQHandler(void)
 {
+}
+
+void CONSOLE_UART_IRQHandler(void)
+{
+    HAL_UART_IRQHandler(&gUartConsole);
 }
 
 /**

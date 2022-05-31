@@ -21,7 +21,6 @@ int main(void)
 
   SystemClock_Config();
 
-  BSP_uartInit(CONSOLE_UART_NUMBER, CONSOLE_UART_BAUDRATE);
   BSP_greenLedInit();
 
   osKernelInitialize();
