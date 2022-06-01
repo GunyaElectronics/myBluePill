@@ -15,6 +15,8 @@ void BSP_consoleReceivedByteCb(uint8_t byte)
 
 void application(void)
 {
+#define CARRIAGE_RETURN_STR    ("\r\n")
+
     const BSP_uartNumber_t consoleUartNumber = 1;
     const BSP_uartHandle_t consoleConfig = {
         .number           = consoleUartNumber,
@@ -24,8 +26,8 @@ void application(void)
     };
 
     const uint8_t kQueueElementCount = 2U;
-    uint8_t receivedByte = 0U;
-    gConsoleRxQueue = osMessageQueueNew(kQueueElementCount, sizeof(receivedByte), NULL);
+    uint8_t receivedBytes[] = CARRIAGE_RETURN_STR;
+    gConsoleRxQueue = osMessageQueueNew(kQueueElementCount, sizeof(uint8_t), NULL);
 
     ASSERT(gConsoleRxQueue != NULL);
 
@@ -33,13 +35,16 @@ void application(void)
     BSP_uartStartReceive(consoleUartNumber);
 
     while (true) {
-        if (osMessageQueueGet(gConsoleRxQueue, &receivedByte, NULL, kMaxAppTimeoutTicks) == osOK) {
+        if (osMessageQueueGet(gConsoleRxQueue, receivedBytes, NULL, kMaxAppTimeoutTicks) == osOK) {
+
             BSP_greenLedToggle();
-            if (receivedByte == '\r') {
-                BSP_uartSendBlocking(consoleUartNumber,(uint8_t *) "\r\n", sizeof("\r\n"));
-            } else {
-                BSP_uartSendBlocking(consoleUartNumber, &receivedByte, sizeof(receivedByte));
-            }
+
+            uint8_t size = (receivedBytes[0] == '\r') ?
+                sizeof(CARRIAGE_RETURN_STR) - sizeof((uint8_t)'\0') : sizeof(uint8_t);
+
+            BSP_uartSendBlocking(consoleUartNumber, receivedBytes, size);
         }
     }
+
+#undef CARRIAGE_RETURN_STR
 }
