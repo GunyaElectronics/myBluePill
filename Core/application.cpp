@@ -1,50 +1,28 @@
 #include "cmsis_os.h"
 #include "BSP.h"
 #include "application.h"
+#include "serialPort.h"
 #include "asserts.h"
 
-static const uint32_t kMaxAppTimeoutTicks = UINT32_MAX;
-static osMessageQueueId_t gConsoleRxQueue = NULL;;
-
-void BSP_consoleReceivedByteCb(uint8_t byte)
-{
-    if (gConsoleRxQueue != NULL) {
-        osMessageQueuePut(gConsoleRxQueue, &byte, 0U, 0U);
-    }
-}
+using namespace PeripheralNamespace;
 
 void application(void)
 {
-#define CARRIAGE_RETURN_STR    ("\r\n")
-
     const BSP_uartNumber_t consoleUartNumber = 1;
-    const BSP_uartHandle_t consoleConfig = {
-        .number           = consoleUartNumber,
-        .receivingType    = BSP_UART_RX_INTERRUPT,
-        .transmittingType = BSP_UART_TX_BLOCKING,
-        .receivedByteCb   = BSP_consoleReceivedByteCb,
-    };
+    char str[] = "\r\n";
 
-    const uint8_t kQueueElementCount = 2U;
-    uint8_t receivedBytes[] = CARRIAGE_RETURN_STR;
-    gConsoleRxQueue = osMessageQueueNew(kQueueElementCount, sizeof(uint8_t), NULL);
-
-    ASSERT(gConsoleRxQueue != NULL);
-
-    BSP_uartInit(&consoleConfig, 115200U);
-    BSP_uartStartReceive(consoleUartNumber);
+    SerialPort console = { consoleUartNumber, 115200 };
+    console.open();
 
     while (true) {
-        if (osMessageQueueGet(gConsoleRxQueue, receivedBytes, NULL, kMaxAppTimeoutTicks) == osOK) {
+        if (console.isByteReceived()) {
 
             BSP_greenLedToggle();
 
-            uint8_t size = (receivedBytes[0] == '\r') ?
-                sizeof(CARRIAGE_RETURN_STR) - sizeof((uint8_t)'\0') : sizeof(uint8_t);
+            str[0] = console.getChar();
+            str[1] = (str[0] == '\r') ? '\n' : '\0';
 
-            BSP_uartSendBlocking(consoleUartNumber, receivedBytes, size);
+            console.putString(str);
         }
     }
-
-#undef CARRIAGE_RETURN_STR
 }
