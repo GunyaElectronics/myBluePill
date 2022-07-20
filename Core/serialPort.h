@@ -1,23 +1,20 @@
 #pragma once
 
+#include "cmsisOs.h"
 #include <stdint.h>
 #include <stddef.h>
 
 namespace PeripheralNamespace
 {
     class SerialPort {
-        uint8_t serialNumber;
+        uint8_t serialNumber = 0;
         uint32_t baudrate;
-
-        uint8_t indexIn;
-        uint8_t indexOut;
-        uint8_t charBuffer[2];
+        osWrapper::osQueue<uint8_t> rxQueue = 2;
     public:
         SerialPort(uint8_t serialNumber, uint32_t baudrate = 9600)
         {
             this->serialNumber = serialNumber;
             this->baudrate = baudrate;
-            indexIn = indexOut = 0;
         }
 
         void byteReceived(uint8_t byte);
@@ -31,5 +28,8 @@ namespace PeripheralNamespace
         ~SerialPort()
         {
         }
+    private:
+        uint8_t lastRxByte;
+        bool isByteAvaliable = false;
     };
 }

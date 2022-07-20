@@ -43,19 +43,23 @@ bool SerialPort::open()
 
 void SerialPort::byteReceived(uint8_t byte)
 {
-    charBuffer[indexIn] = byte;
-    indexIn = indexIn ? 0 : 1;
+    rxQueue.put(byte);
 }
 
 bool SerialPort::isByteReceived()
 {
-    return indexIn != indexOut;
+    if (rxQueue.get(&lastRxByte)) {
+        isByteAvaliable = true;
+        return true;
+    }
+
+    return false;
 }
 
 char SerialPort::getChar()
 {
-    char byte = charBuffer[indexOut];
-    indexOut = indexOut ? 0 : 1;
+    uint8_t byte = lastRxByte;
+    isByteAvaliable = false;
     return byte;
 }
 
