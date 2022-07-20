@@ -1062,6 +1062,9 @@
                 <name>$PROJ_DIR$\..\Core\application.cpp</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Core\cmsisOs.cpp</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Core\serialPort.cpp</name>
             </file>
         </group>
