@@ -2,27 +2,59 @@
 #include "BSP.h"
 #include "application.h"
 #include "serialPort.h"
+#include "commandConsole.h"
 #include "asserts.h"
+#include "utils.h"
+#include <stdio.h>
 
-using namespace PeripheralNamespace;
+static bool helpCmd(const char *pParams, size_t paramCount);
+static bool exitCmd(const char *pParams, size_t paramCount);
+static bool rebootCmd(const char *pParams, size_t paramCount);
+
+static const Command allCmds[] = {
+    { "?",      "[command]",          "Show help", helpCmd },
+    { "help",   "[command]",          "Show help", helpCmd },
+    { "exit",   "",                   "Exit from the console", exitCmd },
+    { "reboot", "[-p] [pause value]", "Example: -p 2 (pause 2 seconds before reboot)", rebootCmd },
+};
+
+static CommandConsole console = { &allCmds[0], COUNT_OF(allCmds) };
+static SerialInputOutput *pIo = NULL;
 
 void application(void)
 {
-    const BSP_uartNumber_t consoleUartNumber = 1;
-    char str[] = "\r\n";
-
-    SerialPort console = { consoleUartNumber, 115200 };
-    console.open();
+    console.start(pIo);
 
     while (true) {
-        if (console.isByteReceived()) {
+        BSP_greenLedToggle();
+        osDelay(500);
+    }
+}
 
-            BSP_greenLedToggle();
+static bool helpCmd(const char *pParams, size_t paramCount)
+{
+    static char helpString[64];
 
-            str[0] = console.getChar();
-            str[1] = (str[0] == '\r') ? '\n' : '\0';
-
-            console.putString(str);
+    if (paramCount) {
+        // if selected one command - view detail info.
+    } else {
+        for (size_t i = 0; i < COUNT_OF(allCmds); i++) {
+            snprintf(helpString, sizeof(helpString), "%s %s\r\n",
+                     allCmds[i].pCmd,
+                     allCmds[i].pHelp);
+            pIo->putString(helpString);
         }
     }
+
+    return false;
+}
+
+static bool exitCmd(const char *pParams, size_t paramCount)
+{
+    return false;
+}
+
+static bool rebootCmd(const char *pParams, size_t paramCount)
+{
+    return false;
 }

@@ -1065,7 +1065,13 @@
                 <name>$PROJ_DIR$\..\Core\cmsisOs.cpp</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Core\commandConsole.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Core\serialPort.cpp</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\Core\utils.h</name>
             </file>
         </group>
     </group>

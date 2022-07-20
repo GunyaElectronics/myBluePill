@@ -56,6 +56,14 @@ bool SerialPort::isByteReceived()
     return false;
 }
 
+uint8_t SerialPort::getByteBlocking()
+{
+    uint8_t byte = 0;
+    rxQueue.get(&byte);
+
+    return byte;
+}
+
 char SerialPort::getChar()
 {
     uint8_t byte = lastRxByte;

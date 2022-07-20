@@ -7,9 +7,6 @@
 namespace PeripheralNamespace
 {
     class SerialPort {
-        uint8_t serialNumber = 0;
-        uint32_t baudrate;
-        osWrapper::osQueue<uint8_t> rxQueue = 2;
     public:
         SerialPort(uint8_t serialNumber, uint32_t baudrate = 9600)
         {
@@ -21,6 +18,7 @@ namespace PeripheralNamespace
         bool open();
         bool isByteReceived();
         char getChar();
+        uint8_t getByteBlocking();
         void putString(char *pLine);
 
         static SerialPort* pSerialInstance1;
@@ -31,5 +29,8 @@ namespace PeripheralNamespace
     private:
         uint8_t lastRxByte;
         bool isByteAvaliable = false;
+        uint8_t serialNumber = 0;
+        uint32_t baudrate;
+        osWrapper::osQueue<uint8_t> rxQueue = 2;
     };
 }
