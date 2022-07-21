@@ -1065,6 +1065,9 @@
                 <name>$PROJ_DIR$\..\Core\cmsisOs.cpp</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Core\commandConsole.cpp</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Core\commandConsole.h</name>
             </file>
             <file>

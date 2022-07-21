@@ -71,7 +71,7 @@ char SerialPort::getChar()
     return byte;
 }
 
-void SerialPort::putString(char *pLine)
+void SerialPort::putBytesBlocking(uint8_t *pBytes, size_t count)
 {
-    BSP_uartSendBlocking(serialNumber,(uint8_t *) pLine, strlen(pLine));
+    BSP_uartSendBlocking(serialNumber, pBytes, count);
 }

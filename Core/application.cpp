@@ -1,15 +1,14 @@
 #include "cmsis_os.h"
 #include "BSP.h"
 #include "application.h"
-#include "serialPort.h"
 #include "commandConsole.h"
 #include "asserts.h"
 #include "utils.h"
 #include <stdio.h>
 
-static bool helpCmd(const char *pParams, size_t paramCount);
-static bool exitCmd(const char *pParams, size_t paramCount);
-static bool rebootCmd(const char *pParams, size_t paramCount);
+static bool helpCmd(const char **pParams, size_t paramCount);
+static bool exitCmd(const char **pParams, size_t paramCount);
+static bool rebootCmd(const char **pParams, size_t paramCount);
 
 static const Command allCmds[] = {
     { "?",      "[command]",          "Show help", helpCmd },
@@ -19,24 +18,41 @@ static const Command allCmds[] = {
 };
 
 static CommandConsole console = { &allCmds[0], COUNT_OF(allCmds) };
-static SerialInputOutput *pIo = NULL;
+static ISerialInputOutput *pIo = NULL;
 
 void application(void)
 {
+    SerialPortIo uartPio = {1, 115200};
+
+    pIo = &uartPio;
     console.start(pIo);
 
     while (true) {
-        BSP_greenLedToggle();
-        osDelay(500);
+        console.exec();
     }
 }
 
-static bool helpCmd(const char *pParams, size_t paramCount)
+static bool helpCmd(const char **pParams, size_t paramCount)
 {
     static char helpString[64];
 
+    BSP_greenLedToggle();
+
     if (paramCount) {
         // if selected one command - view detail info.
+        const Command *pCmd = console.findCommand(pParams[0]);
+        if (pCmd != NULL) {
+            snprintf(helpString, sizeof(helpString),
+                     "Syntax:\r\n"
+                     "\t%s %s\r\n"
+                     "Description:\r\n"
+                     "\t%s\r\n",
+                     pCmd->pCmd,
+                     pCmd->pHelp,
+                     pCmd->pReference);
+        } else {
+            pIo->putString((char *)"Command not found\r\n");
+        }
     } else {
         for (size_t i = 0; i < COUNT_OF(allCmds); i++) {
             snprintf(helpString, sizeof(helpString), "%s %s\r\n",
@@ -49,12 +65,12 @@ static bool helpCmd(const char *pParams, size_t paramCount)
     return false;
 }
 
-static bool exitCmd(const char *pParams, size_t paramCount)
+static bool exitCmd(const char **pParams, size_t paramCount)
 {
-    return false;
+    return true;
 }
 
-static bool rebootCmd(const char *pParams, size_t paramCount)
+static bool rebootCmd(const char **pParams, size_t paramCount)
 {
     return false;
 }

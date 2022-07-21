@@ -19,7 +19,7 @@ namespace PeripheralNamespace
         bool isByteReceived();
         char getChar();
         uint8_t getByteBlocking();
-        void putString(char *pLine);
+        void putBytesBlocking(uint8_t *pBytes, size_t count = 1);
 
         static SerialPort* pSerialInstance1;
 
