@@ -7,29 +7,43 @@ bool CommandConsole::hasParameter(size_t paramIndex, char const *pStr)
 
 void CommandConsole::readLine(void)
 {
+    const char kBackspaceSymbolCode = 0x7F;
     uint16_t symbolCounter = 0;
 
     while (true) {
         char c = pIo->getChar();
-        pIo->putChar(c);
 
-        switch (c) {
-        case '\r':
-        case '\n':
-            c = '\0';
-            break;
-        default:
-            break;
+        if (!(symbolCounter == 0 && c == kBackspaceSymbolCode)) {
+            pIo->putChar(c);
         }
 
-        receivedCommandLine[symbolCounter++] = c;
+        if (c == '\r' || c == '\n') {
+            c = '\0';
+        }
+
+        receivedCommandLine[symbolCounter] = c;
+
+        if (c != kBackspaceSymbolCode) {
+            symbolCounter++;
+        } else if (symbolCounter) {
+            symbolCounter--;
+        }
 
         if (symbolCounter == sizeof(receivedCommandLine)) {
             symbolCounter--;
         }
 
-        if (c == '\0') {
+        if (c == '\0' && symbolCounter) {
             return;
         }
     }
+}
+
+void CommandConsole::parseParameters()
+{
+}
+
+bool CommandConsole::routeCommand()
+{
+    return false;
 }

@@ -17,7 +17,9 @@ struct Command {
 
 class CommandConsole {
     bool hasParameter(size_t paramIndex, char const *pStr);
-    void readLine(void);
+    void readLine();
+    void parseParameters();
+    bool routeCommand();
 public:
     CommandConsole(const Command *pAllCmds, size_t countOfCmds)
     {
@@ -41,12 +43,15 @@ public:
 
     void exec(void)
     {
-        while (true) {
+        bool exitStatus;
+
+        do {
+            pIo->putChar('>');
             readLine();
-            pIo->putString("\r\n");
-            pIo->putString(receivedCommandLine);
-            pIo->putString("\r\n");
-        }
+            pIo->putString((char *)"\r\n");
+            parseParameters();
+            exitStatus = routeCommand();
+        } while (!exitStatus);
     }
 private:
     char receivedCommandLine[MAX_COMMAND_LINE_SIZE_BYTES];
