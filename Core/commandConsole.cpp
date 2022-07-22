@@ -1,4 +1,6 @@
 #include "commandConsole.h"
+#include "asserts.h"
+#include "utils.h"
 
 bool CommandConsole::hasParameter(size_t paramIndex, char const *pStr)
 {
@@ -41,9 +43,52 @@ void CommandConsole::readLine(void)
 
 void CommandConsole::parseParameters()
 {
+    enum {
+        START_PARAM,
+        END_PARAM
+    } state = START_PARAM;
+
+    paramsCount = 0;
+
+    for (uint8_t i = 0; paramsCount < COUNT_OF(pReceivedParams); i++) {
+        char *pParam = &receivedCommandLine[i];
+
+        switch (state) {
+        case START_PARAM:
+            if (*pParam != SEPARATOR  && *pParam != '\0') {
+                pReceivedParams[paramsCount++] = pParam;
+                state = END_PARAM;
+            } else {
+                return;
+            }
+            break;
+        case END_PARAM:
+            if (*pParam == SEPARATOR) {
+                *pParam = '\0';
+                state = START_PARAM;
+            } else if (*pParam == '\0') {
+                return;
+            }
+            break;
+        }
+    }
 }
 
 bool CommandConsole::routeCommand()
 {
+    const uint8_t kCmdIndex = 0;
+    const uint8_t kFirstParamIndex = 1;
+
+    if (paramsCount) {
+        for (uint8_t i = 0; i < hendlerCount; i++) {
+            if (hasParameter(kCmdIndex, pAllCmds[i].pCmd)) {
+                return pAllCmds[i].handler((const char **)
+                    &pReceivedParams[kFirstParamIndex], paramsCount - 1);
+            }
+        }
+
+        pIo->putString((char *)" Command not found\r\n");
+    }
+
     return false;
 }

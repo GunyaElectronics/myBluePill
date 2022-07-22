@@ -14,7 +14,8 @@ static const Command allCmds[] = {
     { "?",      "[command]",          "Show help", helpCmd },
     { "help",   "[command]",          "Show help", helpCmd },
     { "exit",   "",                   "Exit from the console", exitCmd },
-    { "reboot", "[-p] [pause value]", "Example: -p 2 (pause 2 seconds before reboot)", rebootCmd },
+    { "reboot", "[-d] [delay value]", "Example: reboot -d 2 "
+                                      "(delay 2 seconds before reboot)", rebootCmd },
 };
 
 static CommandConsole console = { &allCmds[0], COUNT_OF(allCmds) };
@@ -34,7 +35,7 @@ void application(void)
 
 static bool helpCmd(const char **pParams, size_t paramCount)
 {
-    static char helpString[64];
+    static char helpString[128];
 
     BSP_greenLedToggle();
 
@@ -43,19 +44,20 @@ static bool helpCmd(const char **pParams, size_t paramCount)
         const Command *pCmd = console.findCommand(pParams[0]);
         if (pCmd != NULL) {
             snprintf(helpString, sizeof(helpString),
-                     "Syntax:\r\n"
-                     "\t%s %s\r\n"
-                     "Description:\r\n"
+                     " Syntax:\r\n"
+                     "\t%s\t%s\r\n"
+                     " Description:\r\n"
                      "\t%s\r\n",
                      pCmd->pCmd,
                      pCmd->pHelp,
                      pCmd->pReference);
+            pIo->putString(helpString);
         } else {
-            pIo->putString((char *)"Command not found\r\n");
+            pIo->putString((char *)" Command not found\r\n");
         }
     } else {
         for (size_t i = 0; i < COUNT_OF(allCmds); i++) {
-            snprintf(helpString, sizeof(helpString), "%s %s\r\n",
+            snprintf(helpString, sizeof(helpString), "\t%s\t%s\r\n",
                      allCmds[i].pCmd,
                      allCmds[i].pHelp);
             pIo->putString(helpString);
@@ -72,5 +74,12 @@ static bool exitCmd(const char **pParams, size_t paramCount)
 
 static bool rebootCmd(const char **pParams, size_t paramCount)
 {
+    if (paramCount) {
+        pIo->putString((char *)" System will be reboted after ");
+        pIo->putString((char *)pParams[1]);
+        pIo->putString((char *)" second\r\n");
+    } else {
+        pIo->putString((char *)" Rebooting...\r\n");
+    }
     return false;
 }

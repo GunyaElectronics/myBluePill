@@ -5,6 +5,8 @@
 
 #define MAX_COMMAND_LINE_SIZE_BYTES   (96)
 #define MAX_COMMAND_PARAM_COUNT       (6)
+#define SEPARATOR                     (' ')
+#define LINE_START                    ('>')
 
 typedef bool (*Handler)(const char **pParams, size_t paramCount);
 
@@ -38,6 +40,12 @@ public:
 
     const Command *findCommand(const char *pParam)
     {
+        for (uint8_t i = 0; i < hendlerCount; i++) {
+            if (strcmp(pAllCmds[i].pCmd, pParam) == 0) {
+                return &pAllCmds[i];
+            }
+        }
+
         return NULL;
     }
 
@@ -45,8 +53,10 @@ public:
     {
         bool exitStatus;
 
+        pIo->putString((char *)"Terminal version 1.0\r\n");
+
         do {
-            pIo->putChar('>');
+            pIo->putChar(LINE_START);
             readLine();
             pIo->putString((char *)"\r\n");
             parseParameters();
