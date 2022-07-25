@@ -1,10 +1,26 @@
 #include "commandConsole.h"
 #include "asserts.h"
 #include "utils.h"
+#include <ctype.h>
 
 bool CommandConsole::hasParameter(size_t paramIndex, char const *pStr)
 {
     return strcmp((char const*)pReceivedParams[paramIndex], pStr) == 0;
+}
+
+bool CommandConsole::isSymbolValid(char c)
+{
+#if 0 // TODO: add supporting to detect all symbols
+    if (isalnum(c) ||
+        isspace(c) ||
+        isprint(c) ||
+        c == 0x7F)
+        return true;
+
+    return false;
+#else
+return true;
+#endif
 }
 
 void CommandConsole::readLine(void)
@@ -14,6 +30,11 @@ void CommandConsole::readLine(void)
 
     while (true) {
         char c = pIo->getChar();
+
+        if (!isSymbolValid(c)) {
+            pIo->putChar(c);
+            continue;
+        }
 
         if (!(symbolCounter == 0 && c == kBackspaceSymbolCode)) {
             pIo->putChar(c);

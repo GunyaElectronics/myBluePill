@@ -22,6 +22,7 @@ class CommandConsole {
     void readLine();
     void parseParameters();
     bool routeCommand();
+    bool isSymbolValid(char c);
 public:
     CommandConsole(const Command *pAllCmds, size_t countOfCmds)
     {

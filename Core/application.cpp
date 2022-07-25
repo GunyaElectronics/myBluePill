@@ -19,6 +19,7 @@ static const Command allCmds[] = {
 };
 
 static CommandConsole console = { &allCmds[0], COUNT_OF(allCmds) };
+
 static ISerialInputOutput *pIo = NULL;
 
 void application(void)
