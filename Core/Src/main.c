@@ -83,10 +83,12 @@ void SystemClock_Config(void)
 }
 
 void application(void);
+void cy_toolchain_init(void);
 
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN 5 */
+  cy_toolchain_init();
   application();
   /* Infinite loop */
   for(;;)

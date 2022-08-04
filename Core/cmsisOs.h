@@ -31,4 +31,16 @@ namespace osWrapper
         void *pQueueHandle = NULL;
         size_t elementsCount;
     };
+
+    class Task {
+    public:
+        Task()
+        {
+        }
+
+        ~Task()
+        {
+        }
+    private:
+    };
 }

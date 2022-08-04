@@ -29,6 +29,9 @@ void application(void)
     pIo = &uartPio;
     console.start(pIo);
 
+    char *p = new char;
+    p[0] = 1;
+    delete p;
     while (true) {
         console.exec();
     }

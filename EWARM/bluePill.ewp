@@ -82,7 +82,7 @@
                 </option>
                 <option>
                     <name>GenLowLevelInterface</name>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>GEndianModeBE</name>
@@ -220,6 +220,7 @@
                     <state>STM32F103xB</state>
                     <state>STM32_THREAD_SAFE_STRATEGY=4</state>
                     <state>BLUE_PILL</state>
+                    <state>COMPONENT_FREERTOS</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -353,6 +354,8 @@
                     <state>$PROJ_DIR$/../Drivers/CMSIS/Include</state>
                     <state>$PROJ_DIR$/../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2</state>
                     <state>$PROJ_DIR$/../Drivers/BSP</state>
+                    <state>$PROJ_DIR$/../ClibSupport</state>
+                    <state>$PROJ_DIR$/../ClibSupport/TOOLCHAIN_IAR</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1032,9 +1035,6 @@
         <group>
             <name>EWARM</name>
             <file>
-                <name>$PROJ_DIR$\dlib_lock_glue.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\startup_stm32f103xb.s</name>
             </file>
         </group>
@@ -1071,12 +1071,45 @@
                 <name>$PROJ_DIR$\..\Core\commandConsole.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Core\newdelete.cpp</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Core\serialPort.cpp</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\Core\utils.h</name>
             </file>
         </group>
+    </group>
+    <group>
+        <name>ClibSupport</name>
+        <group>
+            <name>COMPONENT_FREERTOS</name>
+            <file>
+                <name>$PROJ_DIR$\..\ClibSupport\COMPONENT_FREERTOS\cy_mutex_pool.c</name>
+            </file>
+        </group>
+        <group>
+            <name>TOOLCHAIN_IAR</name>
+            <file>
+                <name>$PROJ_DIR$\..\ClibSupport\TOOLCHAIN_IAR\cy_iar_freertos.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\ClibSupport\TOOLCHAIN_IAR\cy_mutex_pool_cfg.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\ClibSupport\TOOLCHAIN_IAR\reent.h</name>
+            </file>
+        </group>
+        <file>
+            <name>$PROJ_DIR$\..\ClibSupport\cy_mutex_pool.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\ClibSupport\cy_time.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\ClibSupport\cy_time.h</name>
+        </file>
     </group>
     <group>
         <name>Drivers</name>
