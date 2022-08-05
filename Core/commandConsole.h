@@ -1,7 +1,10 @@
 #pragma once
 
 #include "serialInputOutput.h"
+#include "cmsisOs.h"
 #include <string.h>
+
+using namespace osWrapper;
 
 #define MAX_COMMAND_LINE_SIZE_BYTES   (96)
 #define MAX_COMMAND_PARAM_COUNT       (6)
@@ -33,6 +36,7 @@ public:
     void start(ISerialInputOutput *pIo)
     {
         this->pIo = pIo;
+        pTask = new MethodTask<CommandConsole, &CommandConsole::task>(this, false, 1024);
     }
 
     ~CommandConsole()
@@ -50,6 +54,7 @@ public:
         return NULL;
     }
 
+private:
     void exec(void)
     {
         bool exitStatus;
@@ -64,11 +69,19 @@ public:
             exitStatus = routeCommand();
         } while (!exitStatus);
     }
-private:
+
+    void task(void)
+    {
+        while (true) {
+            exec();
+        }
+    }
+
     char receivedCommandLine[MAX_COMMAND_LINE_SIZE_BYTES];
     char *pReceivedParams[MAX_COMMAND_PARAM_COUNT];
     const Command *pAllCmds = NULL;
     ISerialInputOutput *pIo = NULL;
     size_t hendlerCount = 0;
     size_t paramsCount = 0;
+    Task* pTask = NULL;
 };
