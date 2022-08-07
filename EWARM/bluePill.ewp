@@ -1118,6 +1118,9 @@
             <file>
                 <name>$PROJ_DIR$\..\Drivers\BSP\BSP.c</name>
             </file>
+            <file>
+                <name>$PROJ_DIR$\..\Drivers\BSP\MCUPinout.h</name>
+            </file>
         </group>
         <group>
             <name>CMSIS</name>

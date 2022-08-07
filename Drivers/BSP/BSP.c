@@ -2,6 +2,7 @@
 #include "BSP.h"
 #include "MCUPinout.h"
 #include "asserts.h"
+#include <stdbool.h>
 
 UART_HandleTypeDef gUartConsole;
 static BSP_uartHandle_t gUartConsoleHandle;
@@ -146,20 +147,112 @@ BSP_Result_t BSP_uartSendBlocking(BSP_uartNumber_t uartNumber, uint8_t *pData, u
     return result;
 }
 
+static uint8_t getGpio(uint16_t *pPin, GPIO_TypeDef **ppPort, BSP_gpioNumber_t pinNumber)
+{
+    bool result = true;
+
+    switch (pinNumber) {
+    case PIN_PC13: *ppPort = GPIOC; *pPin = GPIO_PIN_13; break;
+    case PIN_PC14: *ppPort = GPIOC; *pPin = GPIO_PIN_14; break;
+    case PIN_PC15: *ppPort = GPIOC; *pPin = GPIO_PIN_15; break;
+
+    case PIN_PD0:  *ppPort = GPIOD; *pPin = GPIO_PIN_0; break;
+    case PIN_PD1:  *ppPort = GPIOD; *pPin = GPIO_PIN_1; break;
+
+    case PIN_PA0:  *ppPort = GPIOA; *pPin = GPIO_PIN_0; break;
+    case PIN_PA1:  *ppPort = GPIOA; *pPin = GPIO_PIN_1; break;
+    case PIN_PA2:  *ppPort = GPIOA; *pPin = GPIO_PIN_2; break;
+    case PIN_PA3:  *ppPort = GPIOA; *pPin = GPIO_PIN_3; break;
+    case PIN_PA4:  *ppPort = GPIOA; *pPin = GPIO_PIN_4; break;
+    case PIN_PA5:  *ppPort = GPIOA; *pPin = GPIO_PIN_5; break;
+    case PIN_PA6:  *ppPort = GPIOA; *pPin = GPIO_PIN_6; break;
+    case PIN_PA7:  *ppPort = GPIOA; *pPin = GPIO_PIN_7; break;
+
+    case PIN_PB1:  *ppPort = GPIOB; *pPin = GPIO_PIN_1; break;
+    case PIN_PB2:  *ppPort = GPIOB; *pPin = GPIO_PIN_2; break;
+    case PIN_PB10: *ppPort = GPIOB; *pPin = GPIO_PIN_10; break;
+    case PIN_PB11: *ppPort = GPIOB; *pPin = GPIO_PIN_11; break;
+    case PIN_PB12: *ppPort = GPIOB; *pPin = GPIO_PIN_12; break;
+    case PIN_PB13: *ppPort = GPIOB; *pPin = GPIO_PIN_13; break;
+    case PIN_PB14: *ppPort = GPIOB; *pPin = GPIO_PIN_14; break;
+    case PIN_PB15: *ppPort = GPIOB; *pPin = GPIO_PIN_15; break;
+
+    case PIN_PA8:  *ppPort = GPIOA; *pPin = GPIO_PIN_8; break;
+    case PIN_PA9:  *ppPort = GPIOA; *pPin = GPIO_PIN_9; break;
+    case PIN_PA10: *ppPort = GPIOA; *pPin = GPIO_PIN_10; break;
+    case PIN_PA11: *ppPort = GPIOA; *pPin = GPIO_PIN_11; break;
+    case PIN_PA12: *ppPort = GPIOA; *pPin = GPIO_PIN_12; break;
+    case PIN_PA13: *ppPort = GPIOA; *pPin = GPIO_PIN_13; break;
+    case PIN_PA14: *ppPort = GPIOA; *pPin = GPIO_PIN_14; break;
+    case PIN_PA15: *ppPort = GPIOA; *pPin = GPIO_PIN_15; break;
+
+    case PIN_PB3:  *ppPort = GPIOB; *pPin = GPIO_PIN_3; break;
+    case PIN_PB4:  *ppPort = GPIOB; *pPin = GPIO_PIN_4; break;
+    case PIN_PB5:  *ppPort = GPIOB; *pPin = GPIO_PIN_5; break;
+    case PIN_PB6:  *ppPort = GPIOB; *pPin = GPIO_PIN_6; break;
+    case PIN_PB7:  *ppPort = GPIOB; *pPin = GPIO_PIN_7; break;
+    case PIN_PB8:  *ppPort = GPIOB; *pPin = GPIO_PIN_8; break;
+    case PIN_PB9:  *ppPort = GPIOB; *pPin = GPIO_PIN_9; break;
+
+    default:
+        result = false;
+    }
+
+    return result;
+}
+
 BSP_Result_t BSP_gpioInit(const BSP_gpioHandle_t *pHandle, BSP_gpioPinState initState)
 {
+    uint16_t pin;
+    GPIO_TypeDef *pPort;
+
+    if (!getGpio(&pin, &pPort, pHandle->pinNumber)) {
+        return BSP_RESULT_FAIL;
+    }
+
     return BSP_RESULT_FAIL;
 }
 
 BSP_gpioPinState BSP_gpioRead(BSP_gpioNumber_t pinNumber)
 {
+    uint16_t pin;
+    GPIO_TypeDef *pPort;
+
+    if (!getGpio(&pin, &pPort, pinNumber)) {
+        return BSP_GPIO_RESET;
+    }
+
+    if ((pPort->IDR & pin) != (uint32_t)GPIO_PIN_RESET) {
+        return BSP_GPIO_SET;
+    }
+
     return BSP_GPIO_RESET;
 }
 
 void BSP_gpioWrite(BSP_gpioNumber_t pinNumber, BSP_gpioPinState state)
 {
+    uint16_t pin;
+    GPIO_TypeDef *pPort;
+
+    if (!getGpio(&pin, &pPort, pinNumber)) {
+        return;
+    }
+
+    if (state == BSP_GPIO_SET) {
+        pPort->BSRR = pin;
+    } else {
+        pPort->BSRR = (uint32_t)pin << 16u;
+    }
 }
 
 void BSP_gpioToggle(BSP_gpioNumber_t pinNumber)
 {
+    uint16_t pin;
+    GPIO_TypeDef *pPort;
+
+    if (!getGpio(&pin, &pPort, pinNumber)) {
+        return;
+    }
+
+    HAL_GPIO_TogglePin(pPort, pin);
 }
