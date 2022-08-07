@@ -27,6 +27,14 @@ extern UART_HandleTypeDef gUartConsole;
 #define CONSOLE_IRQ_PRIORITY                (6)
 #define CONSOLE_IRQ_SUB_PRIORITY            (0)
 
+enum {
+    PIN_PC13 = 0, PIN_PC14, PIN_PC15, PIN_PD0, PIN_PD1, PIN_PA0,
+    PIN_PA1, PIN_PA2, PIN_PA3, PIN_PA4, PIN_PA5, PIN_PA6, PIN_PA7, PIN_PB0, 
+    PIN_PB1, PIN_PB2, PIN_PB10, PIN_PB11, PIN_PB12, PIN_PB13, PIN_PB14, PIN_PB15,
+    PIN_PA8, PIN_PA9, PIN_PA10, PIN_PA11, PIN_PA12, PIN_PA13, PIN_PA14, PIN_PA15,
+    PIN_PB3, PIN_PB4, PIN_PB5, PIN_PB6, PIN_PB7, PIN_PB8, PIN_PB9
+};
+
 #else
 #   error "Please define your board"
 #endif
