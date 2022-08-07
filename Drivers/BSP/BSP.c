@@ -145,3 +145,21 @@ BSP_Result_t BSP_uartSendBlocking(BSP_uartNumber_t uartNumber, uint8_t *pData, u
 
     return result;
 }
+
+BSP_Result_t BSP_gpioInit(const BSP_gpioHandle_t *pHandle, BSP_gpioPinState initState)
+{
+    return BSP_RESULT_FAIL;
+}
+
+BSP_gpioPinState BSP_gpioRead(BSP_gpioNumber_t pinNumber)
+{
+    return BSP_GPIO_RESET;
+}
+
+void BSP_gpioWrite(BSP_gpioNumber_t pinNumber, BSP_gpioPinState state)
+{
+}
+
+void BSP_gpioToggle(BSP_gpioNumber_t pinNumber)
+{
+}

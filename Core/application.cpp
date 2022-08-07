@@ -1,4 +1,3 @@
-#include "cmsis_os.h"
 #include "BSP.h"
 #include "application.h"
 #include "commandConsole.h"
@@ -31,7 +30,8 @@ void application(void)
 
     while (true) {
         BSP_greenLedToggle();
-        osDelay(500);
+        const uint32_t kBlinkPeriodMs = 500;
+        osWrapper::Task::delay(kBlinkPeriodMs);
     }
 }
 
