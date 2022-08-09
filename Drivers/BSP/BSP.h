@@ -60,7 +60,9 @@ typedef enum {
     BSP_GPIO_IN_NOPULL,
     BSP_GPIO_IN_PULLUP,
     BSP_GPIO_IN_PULLDOWN,
-    BSP_GPIO_IN_ALTERNATE
+    BSP_GPIO_IN_ALTERNATE,
+    BSP_GPIO_IN_ALTERNATE_PULLUP,
+    BSP_GPIO_IN_ALTERNATE_PULLDOWN
 } BSP_gpioInputType_t;
 
 typedef enum {
@@ -68,7 +70,8 @@ typedef enum {
     BSP_GPIO_OUT_OD, // Open Drain
     BSP_GPIO_OUT_OD_PULLUP,
     BSP_GPIO_OUT_OD_PULLDOWN,
-    BSP_GPIO_OUT_ALTERNATE
+    BSP_GPIO_OUT_ALTERNATE_PP,
+    BSP_GPIO_OUT_ALTERNATE_OD
 } BSP_gpioOutputType_t;
 
 typedef enum {

@@ -1,4 +1,6 @@
+#include "main.h"
 #include "BSP.h"
+#include "MCUPinout.h"
 #include "application.h"
 #include "commandConsole.h"
 #include "asserts.h"
@@ -28,8 +30,18 @@ void application(void)
     pIo = &uartPio;
     console.start(pIo);
 
+    const BSP_gpioHandle_t kPc13 = {
+        .pinNumber     = PIN_PC13,
+        .ioType        = BSP_GPIO_OUTPUT,
+        .io.outputType = BSP_GPIO_OUT_PP,
+        .it.callBack   = NULL,
+        .it.type       = BSP_GPIO_IT_NONE
+    };
+
+    BSP_gpioInit(&kPc13, BSP_GPIO_RESET);
+
     while (true) {
-        BSP_greenLedToggle();
+        BSP_gpioToggle(PIN_PC13);
         const uint32_t kBlinkPeriodMs = 500;
         osWrapper::Task::delay(kBlinkPeriodMs);
     }

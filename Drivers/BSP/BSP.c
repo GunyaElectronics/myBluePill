@@ -201,16 +201,73 @@ static uint8_t getGpio(uint16_t *pPin, GPIO_TypeDef **ppPort, BSP_gpioNumber_t p
     return result;
 }
 
+static void enableGpioClock(GPIO_TypeDef *pPort)
+{
+    if (pPort == GPIOA) {
+        __HAL_RCC_GPIOA_CLK_ENABLE();
+    } else if (pPort == GPIOB) {
+        __HAL_RCC_GPIOB_CLK_ENABLE();
+    } else if (pPort == GPIOC) {
+        __HAL_RCC_GPIOC_CLK_ENABLE();
+    } else if (pPort == GPIOD) {
+        __HAL_RCC_GPIOD_CLK_ENABLE();
+    } else if (pPort == GPIOE) {
+        __HAL_RCC_GPIOE_CLK_ENABLE();
+    }
+}
+
+static uint32_t getModeOut(BSP_gpioOutputType_t out)
+{
+    switch (out) {
+    case BSP_GPIO_OUT_PP: return GPIO_MODE_OUTPUT_PP;
+    case BSP_GPIO_OUT_OD: return GPIO_MODE_OUTPUT_OD;
+    case BSP_GPIO_OUT_ALTERNATE_PP: return GPIO_MODE_AF_PP;
+    case BSP_GPIO_OUT_ALTERNATE_OD: return GPIO_MODE_AF_OD;
+    }
+
+    ASSERT(0);
+}
+
+static uint32_t getPullUpDown(BSP_gpioInputType_t inputType)
+{
+    switch (inputType) {
+    case BSP_GPIO_IN_NOPULL:
+    case BSP_GPIO_IN_ALTERNATE:
+        return GPIO_NOPULL;
+    case BSP_GPIO_IN_PULLUP:
+    case BSP_GPIO_IN_ALTERNATE_PULLUP:
+        return GPIO_PULLUP;
+    case BSP_GPIO_IN_PULLDOWN:
+    case BSP_GPIO_IN_ALTERNATE_PULLDOWN:
+        return GPIO_PULLDOWN;
+    }
+
+    ASSERT(0);
+}
+
 BSP_Result_t BSP_gpioInit(const BSP_gpioHandle_t *pHandle, BSP_gpioPinState initState)
 {
     uint16_t pin;
     GPIO_TypeDef *pPort;
+    GPIO_InitTypeDef config;
 
     if (!getGpio(&pin, &pPort, pHandle->pinNumber)) {
         return BSP_RESULT_FAIL;
     }
 
-    return BSP_RESULT_FAIL;
+    config.Pin = pin;
+    config.Speed = GPIO_SPEED_FREQ_HIGH;
+
+    config.Mode = (pHandle->ioType == BSP_GPIO_OUTPUT) ? getModeOut(pHandle->io.outputType) :
+                                                         GPIO_MODE_INPUT;
+    config.Pull = (pHandle->ioType == BSP_GPIO_OUTPUT) ? GPIO_NOPULL :
+                                                         getPullUpDown(pHandle->io.inputType);
+    enableGpioClock(pPort);
+    HAL_GPIO_Init(pPort, &config);
+
+    BSP_gpioWrite(pHandle->pinNumber, initState);
+
+    return BSP_RESULT_OK;
 }
 
 BSP_gpioPinState BSP_gpioRead(BSP_gpioNumber_t pinNumber)

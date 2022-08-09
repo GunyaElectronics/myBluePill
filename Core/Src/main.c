@@ -21,8 +21,6 @@ int main(void)
 
   SystemClock_Config();
 
-  BSP_greenLedInit();
-
   osKernelInitialize();
 
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
