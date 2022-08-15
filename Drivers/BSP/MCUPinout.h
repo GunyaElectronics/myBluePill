@@ -32,8 +32,51 @@ enum {
     PIN_PA1, PIN_PA2, PIN_PA3, PIN_PA4, PIN_PA5, PIN_PA6, PIN_PA7, PIN_PB0, 
     PIN_PB1, PIN_PB2, PIN_PB10, PIN_PB11, PIN_PB12, PIN_PB13, PIN_PB14, PIN_PB15,
     PIN_PA8, PIN_PA9, PIN_PA10, PIN_PA11, PIN_PA12, PIN_PA13, PIN_PA14, PIN_PA15,
-    PIN_PB3, PIN_PB4, PIN_PB5, PIN_PB6, PIN_PB7, PIN_PB8, PIN_PB9
+    PIN_PB3, PIN_PB4, PIN_PB5, PIN_PB6, PIN_PB7, PIN_PB8, PIN_PB9,
+    PIN_COUNT
 };
+
+typedef struct {
+   GPIO_TypeDef *port;
+   uint32_t mask;
+} Io;
+
+#define IO_INIT_VALUES     { GPIOC, GPIO_PIN_13 }, \
+                           { GPIOC, GPIO_PIN_14 }, \
+                           { GPIOC, GPIO_PIN_15 }, \
+                           { GPIOD, GPIO_PIN_0 },  \
+                           { GPIOD, GPIO_PIN_1 },  \
+                           { GPIOA, GPIO_PIN_0 },  \
+                           { GPIOA, GPIO_PIN_1 },  \
+                           { GPIOA, GPIO_PIN_2 },  \
+                           { GPIOA, GPIO_PIN_3 },  \
+                           { GPIOA, GPIO_PIN_4 },  \
+                           { GPIOA, GPIO_PIN_5 },  \
+                           { GPIOA, GPIO_PIN_6 },  \
+                           { GPIOA, GPIO_PIN_7 },  \
+                           { GPIOB, GPIO_PIN_1 },  \
+                           { GPIOB, GPIO_PIN_2 },  \
+                           { GPIOB, GPIO_PIN_10 }, \
+                           { GPIOB, GPIO_PIN_11 }, \
+                           { GPIOB, GPIO_PIN_12 }, \
+                           { GPIOB, GPIO_PIN_13 }, \
+                           { GPIOB, GPIO_PIN_14 }, \
+                           { GPIOB, GPIO_PIN_15 }, \
+                           { GPIOA, GPIO_PIN_8 },  \
+                           { GPIOA, GPIO_PIN_9 },  \
+                           { GPIOA, GPIO_PIN_10 }, \
+                           { GPIOA, GPIO_PIN_11 }, \
+                           { GPIOA, GPIO_PIN_12 }, \
+                           { GPIOA, GPIO_PIN_13 }, \
+                           { GPIOA, GPIO_PIN_14 }, \
+                           { GPIOA, GPIO_PIN_15 }, \
+                           { GPIOB, GPIO_PIN_3 },  \
+                           { GPIOB, GPIO_PIN_4 },  \
+                           { GPIOB, GPIO_PIN_5 },  \
+                           { GPIOB, GPIO_PIN_6 },  \
+                           { GPIOB, GPIO_PIN_7 },  \
+                           { GPIOB, GPIO_PIN_8 },  \
+                           { GPIOB, GPIO_PIN_9 },
 
 #else
 #   error "Please define your board"

@@ -1071,6 +1071,9 @@
                 <name>$PROJ_DIR$\..\Core\commandConsole.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\..\Core\gpio.cpp</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\..\Core\newdelete.cpp</name>
             </file>
             <file>
