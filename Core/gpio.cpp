@@ -9,9 +9,21 @@ static const Io bluePill[] = {
 
 GPIO::GPIO(uint32_t pinNumber)
 {
-    handle.pinNumber = pinNumber;
-
     ASSERT(pinNumber < PIN_COUNT);
+
+    handle.pinNumber = pinNumber;
+    handle.ioType = BSP_GPIO_INPUT;
+    handle.io.inputType = BSP_GPIO_IN_NOPULL;
+
+    BSP_gpioInit(&handle, BSP_GPIO_RESET);
+}
+
+void GPIO::modeOutput()
+{
+    handle.ioType = BSP_GPIO_OUTPUT;
+    handle.io.outputType = BSP_GPIO_OUT_PP;
+
+    BSP_gpioInit(&handle, BSP_GPIO_RESET);
 }
 
 void GPIO::operator= (bool value)

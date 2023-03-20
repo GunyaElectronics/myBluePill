@@ -9,6 +9,9 @@ public:
     GPIO(uint32_t pin_number);
     ~GPIO();
 
+    void modeInput();
+    void modeOutput();
+
     inline void waitInterrupt();
 
     void togle(void);

@@ -1,6 +1,7 @@
 #include "main.h"
 #include "BSP.h"
 #include "MCUPinout.h"
+#include "gpio.h"
 #include "application.h"
 #include "commandConsole.h"
 #include "asserts.h"
@@ -25,24 +26,19 @@ static ISerialInputOutput *pIo = NULL;
 
 void application(void)
 {
+    const uint32_t kBlinkPeriodMs = 500;
+    GPIO led = PIN_PC13;
+    led.modeOutput();
+
     SerialPortIo uartPio = {1, 115200};
 
     pIo = &uartPio;
     console.start(pIo);
 
-    const BSP_gpioHandle_t kPc13 = {
-        .pinNumber     = PIN_PC13,
-        .ioType        = BSP_GPIO_OUTPUT,
-        .io.outputType = BSP_GPIO_OUT_PP,
-        .it.callBack   = NULL,
-        .it.type       = BSP_GPIO_IT_NONE
-    };
-
-    BSP_gpioInit(&kPc13, BSP_GPIO_RESET);
-
     while (true) {
-        BSP_gpioToggle(PIN_PC13);
-        const uint32_t kBlinkPeriodMs = 500;
+        led = true;
+        osWrapper::Task::delay(kBlinkPeriodMs);
+        led = false;
         osWrapper::Task::delay(kBlinkPeriodMs);
     }
 }
@@ -50,8 +46,6 @@ void application(void)
 static bool helpCmd(const char **pParams, size_t paramCount)
 {
     static char helpString[128];
-
-    BSP_greenLedToggle();
 
     if (paramCount) {
         // if selected one command - view detail info.
