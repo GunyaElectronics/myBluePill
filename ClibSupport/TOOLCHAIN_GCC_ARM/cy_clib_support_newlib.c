@@ -62,7 +62,7 @@ void cy_toolchain_init(void)
 
 
 // XMC™ Lib already defines this so, don't redefine for those devices
-#if !defined(COMPONENT_CAT3)
+#if 0 //defined(COMPONENT_CAT3) TODO!!!
 //--------------------------------------------------------------------------------------------------
 // _sbrk
 //--------------------------------------------------------------------------------------------------
