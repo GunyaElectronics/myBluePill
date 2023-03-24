@@ -4,3 +4,4 @@
 /EWARM/*.ewt
 /CUBEIDE/.settings
 /CUBEIDE/Debug
+/CUBEIDE/*.launch

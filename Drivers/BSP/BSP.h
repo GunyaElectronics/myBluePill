@@ -21,13 +21,13 @@ typedef enum {
     BSP_UART_RX_BLOCKING,
     BSP_UART_RX_INTERRUPT,
     BSP_UART_RX_DMA
-} BSP_uartReceivingType_t;
+} BSP_uartReceivingMethod_t;
 
 typedef enum {
     BSP_UART_TX_BLOCKING,
     BSP_UART_TX_INTERRUPT,
     BSP_UART_TX_DMA
-} BSP_uartTransmittingType_t;
+} BSP_uartTransmittingMethod_t;
 
 typedef uint8_t BSP_uartNumber_t;
 typedef void (*BSP_uartReceivedByteInterrupt)(uint8_t byte);
@@ -35,14 +35,37 @@ typedef void (*BSP_uartTxReadyInterrupt)(void);
 
 typedef struct {
     BSP_uartNumber_t number;
-    BSP_uartReceivingType_t receivingType;
-    BSP_uartTransmittingType_t transmittingType;
+    BSP_uartReceivingMethod_t receivingMethod;
+    BSP_uartTransmittingMethod_t transmittingMethod;
     uint8_t *pTxBuffer;
     uint8_t rxByte;
     uint8_t *pRxBuffer;
     BSP_uartReceivedByteInterrupt receivedByteCb;
     BSP_uartTxReadyInterrupt txReadyCb;
 } BSP_uartHandle_t;
+
+// ---------------------- SPI typedefs ------------------------
+
+typedef enum {
+    BSP_SPI_RTX_BLOCKING,
+    BSP_SPI_RTX_INTERRUPT,
+    BSP_SPI_RTX_DMA
+} BSP_spiRxTxMethod_t;
+
+typedef enum {
+    BSP_SPI_MODE_0,
+    BSP_SPI_MODE_1,
+    BSP_SPI_MODE_2,
+    BSP_SPI_MODE_3
+} BSP_spiMode_t;
+
+typedef uint8_t BSP_spiNumber_t;
+
+typedef struct {
+    BSP_spiNumber_t number;
+    BSP_spiMode_t mode;
+    BSP_spiRxTxMethod_t transferMethod;
+} BSP_spiHandle_t;
 
 // --------------------- GPIO typedefs ------------------------
 
@@ -109,6 +132,12 @@ void BSP_greenLedToggle(void);
 BSP_Result_t BSP_uartInit(const BSP_uartHandle_t *pUartHandle, uint32_t baudrate);
 BSP_Result_t BSP_uartStartReceive(BSP_uartNumber_t uartNumber);
 BSP_Result_t BSP_uartSendBlocking(BSP_uartNumber_t uartNumber, uint8_t *pData, uint16_t sizeBytes);
+
+BSP_Result_t BSP_spiInit(const BSP_spiHandle_t *pHandle);
+uint8_t BSP_spiWriteReadByte(BSP_spiNumber_t number, uint8_t byte);
+BSP_Result_t BSP_spiWrite(BSP_spiNumber_t number, const uint8_t *pData, uint16_t sizeBytes);
+BSP_Result_t BSP_spiRead(BSP_spiNumber_t number, uint8_t *pData, uint16_t sizeBytes);
+void BSP_spiSetNss(BSP_spiNumber_t number, BSP_gpioPinState state);
 
 BSP_Result_t BSP_gpioInit(const BSP_gpioHandle_t *pHandle, BSP_gpioPinState initState);
 BSP_gpioPinState BSP_gpioRead(BSP_gpioNumber_t pinNumber);
