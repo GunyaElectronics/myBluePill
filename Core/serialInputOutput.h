@@ -7,9 +7,9 @@
 class ISerialInputOutput {
 public:
     ISerialInputOutput() {}
-    virtual void putChar(char c) = NULL;
-    virtual void putString(char *pString) = NULL;
-    virtual char getChar() = NULL;
+    virtual void putChar(char c) = 0;
+    virtual void putString(char *pString) = 0;
+    virtual char getChar() = 0;
     virtual ~ISerialInputOutput() {}
 };
 

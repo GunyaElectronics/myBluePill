@@ -2,3 +2,5 @@
 /EWARM/settings
 /EWARM/bluePill
 /EWARM/*.ewt
+/CUBEIDE/.settings
+/CUBEIDE/Debug

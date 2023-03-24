@@ -47,7 +47,7 @@ namespace osWrapper
         static osThreadId_t getCurrentTaskHandle();
 
     public:
-        virtual void exec() = NULL;
+        virtual void exec() = 0;
 
     private:
         static void entry(void *params);
