@@ -87,7 +87,9 @@ static inline void cy_mutex_pool_resume_threads(void)
 
 #endif // defined(MUTEX_POOL_AVAILABLE)
 
+#ifndef __BKPT
 #define __BKPT(value)    __asm volatile ("BKPT     %0" : : "i"(value))
+#endif
 
 #ifdef __cplusplus
 }

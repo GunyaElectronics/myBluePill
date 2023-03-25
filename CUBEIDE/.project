@@ -156,6 +156,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/serialPort.h</locationURI>
 		</link>
 		<link>
+			<name>Core/spi.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/spi.cpp</locationURI>
+		</link>
+		<link>
+			<name>Core/spi.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/spi.h</locationURI>
+		</link>
+		<link>
 			<name>Core/utils.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/utils.h</locationURI>

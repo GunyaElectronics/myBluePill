@@ -247,6 +247,8 @@ static uint32_t getModeOut(BSP_gpioOutputType_t out)
     case BSP_GPIO_OUT_OD: return GPIO_MODE_OUTPUT_OD;
     case BSP_GPIO_OUT_ALTERNATE_PP: return GPIO_MODE_AF_PP;
     case BSP_GPIO_OUT_ALTERNATE_OD: return GPIO_MODE_AF_OD;
+    default:
+        break;
     }
 
     ASSERT(0);
