@@ -2,6 +2,7 @@
 #include "BSP.h"
 #include "MCUPinout.h"
 #include "gpio.h"
+#include "spi.h"
 #include "application.h"
 #include "commandConsole.h"
 #include "asserts.h"
@@ -31,6 +32,10 @@ void application(void)
     led.modeOutput();
 
     SerialPortIo uartPio = {1, 115200};
+
+    SPI loraSpi = 0;
+
+    loraSpi.nssHigh();
 
     pIo = &uartPio;
     console.start(pIo);
