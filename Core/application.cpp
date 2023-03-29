@@ -21,12 +21,13 @@ static const Command allCmds[] = {
                                       "(delay 2 seconds before reboot)", rebootCmd },
 };
 
-static CommandConsole console = { &allCmds[0], COUNT_OF(allCmds) };
-
 static ISerialInputOutput *pIo = NULL;
+static CommandConsole *pConsole = NULL;
 
 void application(void)
 {
+    CommandConsole console = { &allCmds[0], COUNT_OF(allCmds) };
+    pConsole = &console;
     const uint32_t kBlinkPeriodMs = 500;
     GPIO led = PIN_PC13;
     led.modeOutput();
@@ -54,7 +55,7 @@ static bool helpCmd(const char **pParams, size_t paramCount)
 
     if (paramCount) {
         // if selected one command - view detail info.
-        const Command *pCmd = console.findCommand(pParams[0]);
+        const Command *pCmd = pConsole->findCommand(pParams[0]);
         if (pCmd != NULL) {
             snprintf(helpString, sizeof(helpString),
                      " Syntax:\r\n"
