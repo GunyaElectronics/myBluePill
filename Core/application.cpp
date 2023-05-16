@@ -26,7 +26,7 @@ static CommandConsole *pConsole = NULL;
 
 void application(void)
 {
-    CommandConsole console = { &allCmds[0], COUNT_OF(allCmds) };
+    CommandConsole console = { allCmds, COUNT_OF(allCmds) };
     pConsole = &console;
     const uint32_t kBlinkPeriodMs = 500;
     GPIO led = PIN_PC13;
