@@ -6,16 +6,13 @@
 
 using namespace osWrapper;
 
-#define MAX_COMMAND_LINE_SIZE_BYTES   (96)
-#define MAX_COMMAND_PARAM_COUNT       (6)
-#define SEPARATOR                     (' ')
-#define LINE_START                    ('>')
-
 class CommandConsole {
 public:
     CommandConsole(ISerialInputOutput& pIo) : io(pIo)
     {
-        pTask = new MethodTask<CommandConsole, &CommandConsole::task>(this, false, 1024);
+        static constexpr uint16_t taskStackSizeWords = 1024;
+        pTask = new
+            MethodTask<CommandConsole, &CommandConsole::task>(this, false, taskStackSizeWords);
     }
 
     ~CommandConsole()
@@ -38,11 +35,15 @@ private:
     void exec(void);
     void task(void);
 
-    char receivedCommandLine[MAX_COMMAND_LINE_SIZE_BYTES];
-    char *pReceivedParams[MAX_COMMAND_PARAM_COUNT];
+    static constexpr uint8_t maxCommandLineSizeBytes = 96;
+    static constexpr uint8_t maxCommandLineParamCount = 6;
+    char receivedCommandLine[maxCommandLineSizeBytes];
+    char *pReceivedParams[maxCommandLineParamCount];
     ISerialInputOutput& io;
     size_t paramsCount = 0;
     Task* pTask = NULL;
     const char **pParams = NULL;
     size_t handlerParamsCount = 0;
+    static constexpr uint8_t separator = ' ';
+    static constexpr uint8_t lineStart = '>';
 };

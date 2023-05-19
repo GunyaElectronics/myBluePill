@@ -31,11 +31,11 @@ void application(void)
 bool CommandConsole::rebootCmd()
 {
     if (handlerParamsCount) {
-        io.putString((char *)" System will be rebooted after ");
-        io.putString((char *)pParams[0]);
-        io.putString((char *)" second\r\n");
+        io.putString(" System will be rebooted after ");
+        io.putString(pParams[0]);
+        io.putString(" second\r\n");
     } else {
-        io.putString((char *)" Rebooting...\r\n");
+        io.putString(" Rebooting...\r\n");
     }
 
     return false;

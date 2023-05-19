@@ -8,7 +8,7 @@ class ISerialInputOutput {
 public:
     ISerialInputOutput() {}
     virtual void putChar(char c) = 0;
-    virtual void putString(char *pString) = 0;
+    virtual void putString(const char *pString) = 0;
     virtual char getChar() = 0;
     virtual ~ISerialInputOutput() {}
 };
@@ -32,7 +32,7 @@ public:
         putBytesBlocking((uint8_t *)&c);
     }
 
-    void putString(char *pString)
+    void putString(const char *pString)
     {
         putBytesBlocking((uint8_t *)pString, strlen(pString));
     }

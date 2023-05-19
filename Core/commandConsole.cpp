@@ -20,7 +20,8 @@ Command const *getCmd(size_t index)
         { "help",   "[command]",          "Show help", &CommandConsole::helpCmd },
         { "exit",   "",                   "Exit from the console", &CommandConsole::exitCmd },
         { "reboot", "[-d] [delay value]", "Example: reboot -d 2 "
-                                          "(delay 2 seconds before reboot)", &CommandConsole::rebootCmd },
+                                          "(delay 2 seconds before reboot)",
+                                          &CommandConsole::rebootCmd },
     };
 
     if (index < COUNT_OF(allCmds)) {
@@ -151,7 +152,7 @@ void CommandConsole::parseParameters()
 
         switch (state) {
         case START_PARAM:
-            if (*pParam != SEPARATOR  && *pParam != '\0') {
+            if (*pParam != separator  && *pParam != '\0') {
                 pReceivedParams[paramsCount++] = pParam;
                 state = END_PARAM;
             } else {
@@ -159,7 +160,7 @@ void CommandConsole::parseParameters()
             }
             break;
         case END_PARAM:
-            if (*pParam == SEPARATOR) {
+            if (*pParam == separator) {
                 *pParam = '\0';
                 state = START_PARAM;
             } else if (*pParam == '\0') {
@@ -184,7 +185,7 @@ bool CommandConsole::routeCommand()
             }
         }
 
-        io.putString((char *)" Command not found\r\n");
+        io.putString(" Command not found\r\n");
     }
 
     return false;
@@ -194,12 +195,12 @@ void CommandConsole::exec(void)
 {
     bool exitStatus;
 
-    io.putString((char *)"Terminal version 1.0\r\n");
+    io.putString("Terminal version 1.0\r\n");
 
     do {
-        io.putChar(LINE_START);
+        io.putChar(lineStart);
         readLine();
-        io.putString((char *)"\r\n");
+        io.putString("\r\n");
         parseParameters();
         exitStatus = routeCommand();
     } while (!exitStatus);
