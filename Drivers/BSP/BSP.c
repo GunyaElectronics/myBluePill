@@ -78,12 +78,12 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
         GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(CONSOLE_UART_GPIO, &GPIO_InitStruct);
 
-        if (gUartConsoleHandle.receivingType == BSP_UART_RX_INTERRUPT) {
+        if (gUartConsoleHandle.receivingMethod == BSP_UART_RX_INTERRUPT) {
             HAL_NVIC_SetPriority(CONSOLE_UART_IRQN,
                                  CONSOLE_IRQ_PRIORITY,
                                  CONSOLE_IRQ_SUB_PRIORITY);
             HAL_NVIC_EnableIRQ(CONSOLE_UART_IRQN);
-        } else if (gUartConsoleHandle.receivingType == BSP_UART_RX_DMA) {
+        } else if (gUartConsoleHandle.receivingMethod == BSP_UART_RX_DMA) {
             // TODO: init DMA
         }
     }
@@ -145,6 +145,30 @@ BSP_Result_t BSP_uartSendBlocking(BSP_uartNumber_t uartNumber, uint8_t *pData, u
     }
 
     return result;
+}
+
+BSP_Result_t BSP_spiInit(const BSP_spiHandle_t *pHandle)
+{
+    return BSP_RESULT_FAIL;
+}
+
+uint8_t BSP_spiWriteReadByte(BSP_spiNumber_t number, uint8_t byte)
+{
+    return 0;
+}
+
+BSP_Result_t BSP_spiWrite(BSP_spiNumber_t number, const uint8_t *pData, uint16_t sizeBytes)
+{
+    return BSP_RESULT_FAIL;
+}
+
+BSP_Result_t BSP_spiRead(BSP_spiNumber_t number, uint8_t *pData, uint16_t sizeBytes)
+{
+    return BSP_RESULT_FAIL;
+}
+
+void BSP_spiSetNss(BSP_spiNumber_t number, BSP_gpioPinState state)
+{
 }
 
 static uint8_t getGpio(uint16_t *pPin, GPIO_TypeDef **ppPort, BSP_gpioNumber_t pinNumber)
@@ -223,6 +247,8 @@ static uint32_t getModeOut(BSP_gpioOutputType_t out)
     case BSP_GPIO_OUT_OD: return GPIO_MODE_OUTPUT_OD;
     case BSP_GPIO_OUT_ALTERNATE_PP: return GPIO_MODE_AF_PP;
     case BSP_GPIO_OUT_ALTERNATE_OD: return GPIO_MODE_AF_OD;
+    default:
+        break;
     }
 
     ASSERT(0);

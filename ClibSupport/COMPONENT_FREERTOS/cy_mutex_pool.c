@@ -24,12 +24,12 @@
  * limitations under the License.
  **************************************************************************************************/
 
+#include <cmsis_compiler.h>
 #include "cy_mutex_pool.h"
 #include "cy_mutex_pool_cfg.h"
 #include <task.h>
 #include <stdbool.h>
 #include <string.h>
-//#include <cmsis_compiler.h>
 
 // The standard library requires mutexes in order to ensure thread safety for
 // operations such as malloc. The mutexes must be initialized at startup.

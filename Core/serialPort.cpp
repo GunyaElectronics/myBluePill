@@ -31,10 +31,10 @@ bool SerialPort::open()
     ASSERT(receivedByteCb != NULL);
 
     const BSP_uartHandle_t kSerialConfig = {
-        .number           = serialNumber,
-        .receivingType    = BSP_UART_RX_INTERRUPT,
-        .transmittingType = BSP_UART_TX_BLOCKING,
-        .receivedByteCb   = receivedByteCb,
+        .number             = serialNumber,
+        .receivingMethod    = BSP_UART_RX_INTERRUPT,
+        .transmittingMethod = BSP_UART_TX_BLOCKING,
+        .receivedByteCb     = receivedByteCb,
     };
 
     return BSP_uartInit(&kSerialConfig, baudrate) == BSP_RESULT_OK &&
